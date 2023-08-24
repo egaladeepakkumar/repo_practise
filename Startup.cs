@@ -33,13 +33,23 @@ namespace WebApplication1
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+
+                DeveloperExceptionPageOptions depo = new DeveloperExceptionPageOptions()
+                {
+                    SourceCodeLineCount = 1
+                };
+                app.UseDeveloperExceptionPage(depo);
             }
+            DefaultFilesOptions dfo = new DefaultFilesOptions();
+            //dfo.DefaultFileNames.Clear();
+            //dfo.DefaultFileNames.Add("myhomepage.html");
+            //app.UseDefaultFiles(dfo);
             app.UseStaticFiles();
             //app.UseRouting();
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("tes");
+                throw new Exception("hello");
+                //await context.Response.WriteAsync("tes");
             });
             //app.UseEndpoints(endpoints =>
             //{
