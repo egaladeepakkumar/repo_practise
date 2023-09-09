@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.models;
 
 namespace WebApplication1
 {
@@ -26,38 +27,33 @@ namespace WebApplication1
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+            services.AddSingleton<IEmployeerepository, Employeerepository>();
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-
-                DeveloperExceptionPageOptions depo = new DeveloperExceptionPageOptions()
-                {
-                    SourceCodeLineCount = 1
-                };
-                app.UseDeveloperExceptionPage(depo);
+                app.UseDeveloperExceptionPage();
             }
-            DefaultFilesOptions dfo = new DefaultFilesOptions();
-            //dfo.DefaultFileNames.Clear();
-            //dfo.DefaultFileNames.Add("myhomepage.html");
-            //app.UseDefaultFiles(dfo);
+            
+           
             app.UseStaticFiles();
-            //app.UseRouting();
+            
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
+            });
+
             app.Run(async (context) =>
             {
-                throw new Exception("hello");
-                //await context.Response.WriteAsync("tes");
+                
+                await context.Response.WriteAsync("development environment area");
             });
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapGet("/", async context =>
-            //    {
-            //        await context.Response.WriteAsync(_config["testkey"]);
-            //    });
-            //});
+            
         }
     }
 }
